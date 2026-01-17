@@ -1,0 +1,93 @@
+'use client';
+
+import React, { useEffect } from 'react';
+import { useAuth } from '../../components/AuthProvider';
+import TodoList from '../../components/TodoList';
+import TodoForm from '../../components/TodoForm';
+import { useRouter } from 'next/navigation';
+
+const DashboardPage = () => {
+  
+  const { user, loading, logout } = useAuth();
+  const router = useRouter();
+
+  
+  useEffect(() => {
+    if (!user && !loading) {
+      router.replace('/login'); 
+    }
+  }, [user, loading, router]);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-lg">Loading...</div>
+      </div>
+    );
+  }
+
+  if (!user) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-lg">Please log in to continue</div>
+      </div>
+    );
+  }
+
+  const handleLogout = () => {
+    logout(); 
+    router.replace('/login'); 
+  };
+
+  return (
+    <div className="min-h-screen bg-gray-50">
+      <nav className="bg-white shadow">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between h-16">
+            <div className="flex">
+              <div className="flex-shrink-0 flex items-center">
+                <h1 className="text-xl font-bold text-gray-900">Todo App</h1>
+              </div>
+            </div>
+            <div className="flex items-center">
+              <div className="ml-3 relative">
+                <div className="flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-y-0 sm:space-x-4">
+                  <span className="text-sm font-medium text-gray-700">Welcome, {user.name}</span>
+                  <button
+                    onClick={handleLogout}
+                    className="ml-0 sm:ml-4 inline-flex items-center px-3 py-1 border border-transparent text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+                  >
+                    Logout
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </nav>
+
+      <main className="py-6">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6">
+            <div className="flex-1 min-w-0">
+              <h1 className="text-2xl font-bold leading-7 text-gray-900 sm:text-3xl sm:truncate">
+                My Tasks
+              </h1>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-1 lg:grid-cols-3">
+            <div className="lg:col-span-2">
+              <TodoList />
+            </div>
+            <div>
+              <TodoForm />
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  );
+};
+
+export default DashboardPage;

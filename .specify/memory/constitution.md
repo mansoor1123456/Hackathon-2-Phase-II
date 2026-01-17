@@ -1,55 +1,46 @@
-# [PROJECT_NAME] Constitution
-<!-- Example: Spec Constitution, TaskFlow Constitution, etc. -->
+<!-- SYNC IMPACT REPORT:
+Version change: N/A -> 1.0.0
+Modified principles: N/A (new constitution)
+Added sections: All sections (new constitution for Todo Evolution project)
+Removed sections: N/A
+Templates requiring updates: ⚠ pending - .specify/templates/plan-template.md, .specify/templates/spec-template.md, .specify/templates/tasks-template.md
+Follow-up TODOs: None
+-->
+# The Evolution of Todo – From Console App to Cloud-Native AI System Constitution
 
 ## Core Principles
 
-### [PRINCIPLE_1_NAME]
-<!-- Example: I. Library-First -->
-[PRINCIPLE_1_DESCRIPTION]
-<!-- Example: Every feature starts as a standalone library; Libraries must be self-contained, independently testable, documented; Clear purpose required - no organizational-only libraries -->
+### Spec-Driven Development
+All code must be generated strictly from written specifications. No implementation without a corresponding spec that clearly defines the requirements, behavior, and acceptance criteria.
 
-### [PRINCIPLE_2_NAME]
-<!-- Example: II. CLI Interface -->
-[PRINCIPLE_2_DESCRIPTION]
-<!-- Example: Every library exposes functionality via CLI; Text in/out protocol: stdin/args → stdout, errors → stderr; Support JSON + human-readable formats -->
+### No Manual Coding
+Developers may not write or edit code manually; only specification refinement is allowed. All code generation must be driven through automated tools and agents based on specifications.
 
-### [PRINCIPLE_3_NAME]
-<!-- Example: III. Test-First (NON-NEGOTIABLE) -->
-[PRINCIPLE_3_DESCRIPTION]
-<!-- Example: TDD mandatory: Tests written → User approved → Tests fail → Then implement; Red-Green-Refactor cycle strictly enforced -->
+### Progressive Evolution
+Each phase must build logically on the previous phase without breaking architectural integrity. Changes must maintain backward compatibility where specified and follow a clear evolutionary path.
 
-### [PRINCIPLE_4_NAME]
-<!-- Example: IV. Integration Testing -->
-[PRINCIPLE_4_DESCRIPTION]
-<!-- Example: Focus areas requiring integration tests: New library contract tests, Contract changes, Inter-service communication, Shared schemas -->
+### Reusable Intelligence
+Skills, reusable templates, and agent roles must be explicitly defined and applied across all phases. Reusable intelligence ensures consistency and reduces redundancy throughout the project lifecycle.
 
-### [PRINCIPLE_5_NAME]
-<!-- Example: V. Observability, VI. Versioning & Breaking Changes, VII. Simplicity -->
-[PRINCIPLE_5_DESCRIPTION]
-<!-- Example: Text I/O ensures debuggability; Structured logging required; Or: MAJOR.MINOR.BUILD format; Or: Start simple, YAGNI principles -->
+### Deterministic Behavior
+System outputs must be predictable and testable at every phase. All functionality must exhibit deterministic behavior with clear inputs producing consistent, verifiable outputs.
 
-### [PRINCIPLE_6_NAME]
+### Clean Architecture
+Clear separation of concerns must be maintained throughout all phases. Architecture should follow clean design principles with well-defined boundaries between components, layers, and responsibilities.
 
+### Reusability First
+Agents and skills designed in Phase I must be usable in later phases without modification. Design for reusability from the initial phase, ensuring components are generalizable and adaptable for future phases.
 
-[PRINCIPLE__DESCRIPTION]
+## Technology Stack and Phase Requirements
+The project follows a structured five-phase evolution: Phase I (In-Memory Python Console App), Phase II (Full-Stack Web Application with Next.js/FastAPI), Phase III (AI-Powered Todo Chatbot), Phase IV (Local Kubernetes Deployment), and Phase V (Advanced Cloud Deployment). Each phase builds on the previous while maintaining core principles.
 
-## [SECTION_2_NAME]
-<!-- Example: Additional Constraints, Security Requirements, Performance Standards, etc. -->
-
-[SECTION_2_CONTENT]
-<!-- Example: Technology stack requirements, compliance standards, deployment policies, etc. -->
-
-## [SECTION_3_NAME]
-<!-- Example: Development Workflow, Review Process, Quality Gates, etc. -->
-
-[SECTION_3_CONTENT]
-<!-- Example: Code review requirements, testing gates, deployment approval process, etc. -->
+## Development Workflow
+All development follows the spec-driven approach: spec → plan → tasks → implement. Each phase must be fully implemented before advancing to the next. Reusable intelligence (agents, skills, templates) created in earlier phases must remain functional in later phases without modification.
 
 ## Governance
-<!-- Example: Constitution supersedes all other practices; Amendments require documentation, approval, migration plan -->
 
-[GOVERNANCE_RULES]
-<!-- Example: All PRs/reviews must verify compliance; Complexity must be justified; Use [GUIDANCE_FILE] for runtime development guidance -->
+All project work must comply with the core principles stated above. No code changes are permitted outside the spec-driven development process. Any deviations from these principles require formal constitution amendments with clear justification and approval from project stakeholders.
 
-**Version**: [CONSTITUTION_VERSION] | **Ratified**: [RATIFICATION_DATE] | **Last Amended**: [LAST_AMENDED_DATE]
-<!-- Example: Version: 2.1.1 | Ratified: 2025-06-13 | Last Amended: 2025-07-16 -->
+Versioning follows semantic versioning: MAJOR for breaking governance/principle changes, MINOR for new principles or sections, PATCH for clarifications or corrections.
+
+**Version**: 1.0.0 | **Ratified**: 2026-01-08 | **Last Amended**: 2026-01-08
