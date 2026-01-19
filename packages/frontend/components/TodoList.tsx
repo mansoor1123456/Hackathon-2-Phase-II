@@ -3,23 +3,27 @@
 import React, { useState, useEffect } from 'react';
 import { Todo, TodoUpdate } from '../../shared/types/todo';
 import TodoItem from './TodoItem';
+import EditTodoModal from './EditTodoModal';
 
 interface TodoListProps {
   onTodoUpdate?: (todo: Todo) => void;
   onTodoDelete?: (todoId: string) => void;
+  refreshTrigger?: number; // Add a prop to trigger refresh
 }
 
-const TodoList: React.FC<TodoListProps> = ({ onTodoUpdate, onTodoDelete }) => {
+const TodoList: React.FC<TodoListProps> = ({ onTodoUpdate, onTodoDelete, refreshTrigger }) => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [filter, setFilter] = useState<'all' | 'completed' | 'incomplete'>('all');
   const [limit, setLimit] = useState(20);
   const [offset, setOffset] = useState(0);
+  const [editingTodo, setEditingTodo] = useState<Todo | null>(null);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
   useEffect(() => {
     loadTodos();
-  }, [filter, limit, offset]);
+  }, [filter, limit, offset, refreshTrigger]);
 
   const loadTodos = async () => {
     try {
@@ -35,8 +39,14 @@ const TodoList: React.FC<TodoListProps> = ({ onTodoUpdate, onTodoDelete }) => {
       if (!token) throw new Error('Unauthorized: No token found');
 
       // 🔹 Fetch todos with Authorization header
+      // Use 'status' instead of 'filter' to match backend API
+      let url = `http://127.0.0.1:8000/todos/?limit=${limit}&offset=${offset}`;
+      if (filter !== 'all') {
+        url += `&status=${filter}`;
+      }
+
       const res = await fetch(
-        `http://127.0.0.1:8000/todos/?limit=${limit}&offset=${offset}&filter=${filter}`,
+        url,
         {
           method: 'GET',
           headers: {
@@ -50,8 +60,9 @@ const TodoList: React.FC<TodoListProps> = ({ onTodoUpdate, onTodoDelete }) => {
         throw new Error(`API request failed: ${res.status}`);
       }
 
-      const data = await res.json();
-      setTodos(data.todos || []);
+      // The API returns an array directly, not wrapped in an object
+      const todosData = await res.json();
+      setTodos(Array.isArray(todosData) ? todosData : []);
     } catch (err: any) {
       setError(err.message || 'Failed to load todos');
     } finally {
@@ -88,6 +99,52 @@ const TodoList: React.FC<TodoListProps> = ({ onTodoUpdate, onTodoDelete }) => {
     } catch (err: any) {
       setError(err.message || 'Failed to update todo');
     }
+  };
+
+  const editTodo = async (todoId: string, updatedData: TodoUpdate) => {
+    try {
+      const token = document.cookie
+        .split('; ')
+        .find(row => row.startsWith('todo_app_token='))
+        ?.split('=')[1];
+
+      if (!token) throw new Error('Unauthorized: No token found');
+
+      const res = await fetch(`http://127.0.0.1:8000/todos/${todoId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(updatedData),
+      });
+
+      if (!res.ok) throw new Error('Failed to update todo');
+
+      const updatedTodo = await res.json();
+      setTodos(todos.map(t => (t.id === todoId ? updatedTodo : t)));
+
+      if (onTodoUpdate) onTodoUpdate(updatedTodo);
+
+      return updatedTodo;
+    } catch (err: any) {
+      setError(err.message || 'Failed to update todo');
+      throw err;
+    }
+  };
+
+  const handleEdit = (todo: Todo) => {
+    setEditingTodo(todo);
+    setIsEditModalOpen(true);
+  };
+
+  const handleSaveEdit = async (updatedTodo: TodoUpdate) => {
+    if (!editingTodo) return;
+
+    const result = await editTodo(editingTodo.id, updatedTodo);
+    setIsEditModalOpen(false);
+    setEditingTodo(null);
+    return result;
   };
 
   const handleDelete = async (todoId: string) => {
@@ -175,10 +232,21 @@ const TodoList: React.FC<TodoListProps> = ({ onTodoUpdate, onTodoDelete }) => {
               todo={todo}
               onToggleComplete={handleToggleComplete}
               onDelete={handleDelete}
+              onEdit={handleEdit}
             />
           ))
         )}
       </ul>
+
+      {isEditModalOpen && editingTodo && (
+        <EditTodoModal
+          isOpen={isEditModalOpen}
+          todo={editingTodo}
+          onClose={() => setIsEditModalOpen(false)}
+          onSave={handleSaveEdit}
+          onError={(error) => setError(error)}
+        />
+      )}
     </div>
   );
 };

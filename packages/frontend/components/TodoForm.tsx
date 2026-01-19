@@ -6,9 +6,10 @@ import { todoApi } from '../lib/todo-api';
 
 interface TodoFormProps {
   onTodoCreated?: (todo: any) => void;
+  onRefresh?: () => void; // Add refresh callback
 }
 
-const TodoForm: React.FC<TodoFormProps> = ({ onTodoCreated }) => {
+const TodoForm: React.FC<TodoFormProps> = ({ onTodoCreated, onRefresh }) => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [error, setError] = useState<string | null>(null);
@@ -60,6 +61,11 @@ const TodoForm: React.FC<TodoFormProps> = ({ onTodoCreated }) => {
 
       if (onTodoCreated) {
         onTodoCreated(newTodo);
+      }
+
+      // Refresh the todo list to show the new todo
+      if (onRefresh) {
+        onRefresh();
       }
     } catch (err: any) {
       setError(err.message || 'Failed to create todo');

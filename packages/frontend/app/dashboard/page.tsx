@@ -1,15 +1,20 @@
 'use client';
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useAuth } from '../../components/AuthProvider';
 import TodoList from '../../components/TodoList';
 import TodoForm from '../../components/TodoForm';
 import { useRouter } from 'next/navigation';
 
 const DashboardPage = () => {
-  
+  const [refreshTrigger, setRefreshTrigger] = useState(0);
+
   const { user, loading, logout } = useAuth();
   const router = useRouter();
+
+  const handleRefresh = () => {
+    setRefreshTrigger(prev => prev + 1);
+  };
 
   
   useEffect(() => {
@@ -78,10 +83,10 @@ const DashboardPage = () => {
 
           <div className="grid grid-cols-1 gap-6 md:grid-cols-1 lg:grid-cols-3">
             <div className="lg:col-span-2">
-              <TodoList />
+              <TodoList refreshTrigger={refreshTrigger} />
             </div>
             <div>
-              <TodoForm />
+              <TodoForm onRefresh={handleRefresh} />
             </div>
           </div>
         </div>

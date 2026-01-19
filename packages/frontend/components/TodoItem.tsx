@@ -5,9 +5,10 @@ interface TodoItemProps {
   todo: Todo;
   onToggleComplete: (todo: Todo) => void;
   onDelete: (todoId: string) => void;
+  onEdit: (todo: Todo) => void;
 }
 
-const TodoItem: React.FC<TodoItemProps> = ({ todo, onToggleComplete, onDelete }) => {
+const TodoItem: React.FC<TodoItemProps> = ({ todo, onToggleComplete, onDelete, onEdit }) => {
   return (
     <li className="px-4 py-4 sm:px-6 hover:bg-gray-50">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between space-y-2 sm:space-y-0">
@@ -33,8 +34,17 @@ const TodoItem: React.FC<TodoItemProps> = ({ todo, onToggleComplete, onDelete })
         </div>
         <div className="flex items-center space-x-2 sm:justify-end">
           <span className="text-xs text-gray-500">
-            {new Date(todo.updatedAt).toLocaleDateString()}
+            {todo.updatedAt ? (() => {
+              const date = new Date(todo.updatedAt);
+              return isNaN(date.getTime()) ? 'Invalid Date' : date.toLocaleDateString();
+            })() : 'N/A'}
           </span>
+          <button
+            onClick={() => onEdit(todo)}
+            className="text-blue-600 hover:text-blue-900 text-sm font-medium mr-2"
+          >
+            Edit
+          </button>
           <button
             onClick={() => onDelete(todo.id)}
             className="text-red-600 hover:text-red-900 text-sm font-medium"
