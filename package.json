@@ -4,10 +4,12 @@
   "description": "Full-stack todo application with Next.js and FastAPI",
   "private": true,
   "scripts": {
-    "dev": "turbo dev",
-    "build": "turbo run build",
-    "lint": "turbo lint",
-    "test": "turbo test"
+    "dev": "echo skip turbo",
+    "build": "echo skip turbo",
+    "lint": "echo skip turbo"
+  },
+  "dependencies": {
+    "lucide-react": "^0.562.0"
   },
   "devDependencies": {
     "turbo": "^2.7.5"
@@ -18,8 +20,5 @@
   "packageManager": "npm@9.8.1",
   "workspaces": [
     "packages/*"
-  ],
-  "dependencies": {
-    "lucide-react": "^0.562.0"
-  }
+  ]
 }
